@@ -26,6 +26,8 @@ jobs:
             # If the file doesn't exist, just rename the new data file
             mv new-data.json aggregate-mt-aqi-data.json
           fi
+          # Gets the total acreage burnt so far this year
+          curl https://services3.arcgis.com/T4QMspbfLg3qTGWY/ArcGIS/rest/services/WFIGS_Incident_Locations_YearToDate/FeatureServer/0/query?f=json&outStatistics=%5B%7B%22onStatisticField%22%3A%22IncidentSize%22%2C%22outStatisticFieldName%22%3A%22IncidentSize_SUM%22%2C%22statisticType%22%3A%22sum%22%7D%5D&returnGeometry=false&spatialRel=esriSpatialRelIntersects&where=(IncidentTypeCategory%20%3D%20%27WF%27%20AND%20POOState%20%3D%20%27US-MT%27)%20and%20(1%3D1) | jq '.' > cumulative-acreage.json
       - name: Commit and push if changed
         run: |-
           git config user.name "Automated"
