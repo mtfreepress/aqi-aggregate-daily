@@ -1,0 +1,36 @@
+name: Scrape air quality data
+
+on:
+  schedule:
+    - cron: "0 6 * * *" # Run once per day at 6:00 AM UTC
+  push:
+  workflow_dispatch:
+
+jobs:
+  scheduled:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out this repo
+        uses: actions/checkout@v2
+      - name: Fetch latest data
+        run: |-
+          # Fetch the latest data and store it in a temporary file
+          curl https://www.airnowapi.org/aq/data/\?parameters\=PM25\&BBOX\=-116.160889,44.298048,-103.416748,49.172497\&dataType\=A\&format\=application/json\&verbose\=1\&nowcastonly\=0\&monitortype\=2\&includerawconcentrations\=0\&API_KEY\=40F0E34D-07B2-4DF3-B8B8-8563AD479DE3 | jq '.' > new-data.json
+
+          # Check if the existing file exists
+          if [ -f aggregate-mt-aqi-data.json ]; then
+            # Append the new data to the existing file
+            jq -s '.[0] + .[1]' aggregate-mt-aqi-data.json new-data.json > aggregate-mt-aqi-data-temp.json
+            mv aggregate-mt-aqi-data-temp.json aggregate-mt-aqi-data.json
+          else
+            # If the file doesn't exist, just rename the new data file
+            mv new-data.json aggregate-mt-aqi-data.json
+          fi
+      - name: Commit and push if changed
+        run: |-
+          git config user.name "Automated"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          timestamp=$(date -u)
+          git commit -m "Latest data: ${timestamp}" || exit 0
+          git push
