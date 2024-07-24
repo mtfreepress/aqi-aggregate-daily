@@ -2,7 +2,7 @@ name: Scrape air quality data
 
 on:
   schedule:
-    - cron: "0 6 * * *" # Run once per day at 6:00 AM UTC
+    - cron: "0 * * * *" # Run once per day at 6:00 AM UTC
   push:
   workflow_dispatch:
 
