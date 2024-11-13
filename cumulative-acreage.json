@@ -1,9 +1,30 @@
 {
-  "error": {
-    "code": 500,
-    "message": "Unauthorized access",
-    "details": [
-      "Unauthorized access"
-    ]
-  }
+  "objectIdFieldName": "OBJECTID",
+  "uniqueIdField": {
+    "name": "OBJECTID",
+    "isSystemMaintained": true
+  },
+  "globalIdFieldName": "GlobalID",
+  "geometryType": "esriGeometryPoint",
+  "spatialReference": {
+    "wkid": 4269,
+    "latestWkid": 4269
+  },
+  "fields": [
+    {
+      "name": "IncidentSize_SUM",
+      "type": "esriFieldTypeDouble",
+      "alias": "IncidentSize_SUM",
+      "sqlType": "sqlTypeFloat",
+      "domain": null,
+      "defaultValue": null
+    }
+  ],
+  "features": [
+    {
+      "attributes": {
+        "IncidentSize_SUM": 164752.06000000332
+      }
+    }
+  ]
 }
